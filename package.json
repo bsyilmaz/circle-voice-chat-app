@@ -1,0 +1,75 @@
+{
+  "name": "bizxm-app",
+  "version": "1.0.0",
+  "description": "Desktop voice chat and screen sharing application",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "start:signaling": "node src/signaling/server.js",
+    "build": "electron-builder build --mac --win",
+    "build:mac": "electron-builder build --mac",
+    "build:win": "electron-builder build --win",
+    "build:linux": "electron-builder build --linux",
+    "build:win-x64": "electron-builder build --win --x64",
+    "package-all": "npm run build:mac && npm run build:win",
+    "prepare-icons": "mkdir -p public/assets && cp public/assets/icon.svg public/assets/icon.png && cp public/assets/icon.svg public/assets/icon.icns",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0",
+    "qrcode": "^1.5.4",
+    "simple-peer": "^9.11.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "ws": "^8.18.2"
+  },
+  "devDependencies": {
+    "electron": "^36.2.0",
+    "electron-builder": "^26.0.12",
+    "electron-icon-builder": "^2.0.1"
+  },
+  "build": {
+    "appId": "com.bizxm.app",
+    "productName": "BizXM",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "darkModeSupport": true,
+      "icon": "public/assets/icon.icns"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network;Audio;Video",
+      "icon": "public/assets/icon.png"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "publish": null
+  }
+} 

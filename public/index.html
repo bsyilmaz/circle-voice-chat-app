@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://bizxm.onrender.com wss://bizxm.onrender.com https://solar-desert-cardamom.glitch.me wss://solar-desert-cardamom.glitch.me http://localhost:3001 ws://localhost:3001 http://*:3001 ws://*:3001;">
+  <title>BizXM - Voice Chat & Screen Sharing</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="dark-theme">
+  <div class="container">
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+      <div class="logo">
+        <i class="fas fa-comments"></i>
+        <h1>BizXM</h1>
+      </div>
+      <div class="welcome-content">
+        <div class="form-group">
+          <label for="username">Your Name</label>
+          <input type="text" id="username" placeholder="Enter your name" maxlength="20">
+        </div>
+        <div class="button-group">
+          <button id="create-room-btn" class="primary-btn">
+            <i class="fas fa-plus-circle"></i> Create Room
+          </button>
+          <button id="join-room-btn" class="secondary-btn">
+            <i class="fas fa-sign-in-alt"></i> Join Room
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Room Screen -->
+    <div id="create-room-screen" class="screen">
+      <div class="screen-header">
+        <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        <h2>Create Room</h2>
+      </div>
+      <div class="screen-content">
+        <div class="form-group">
+          <label for="room-password">Room Password (Optional)</label>
+          <input type="password" id="room-password" placeholder="Leave empty for no password">
+        </div>
+        <button id="create-room-submit" class="primary-btn">
+          <i class="fas fa-plus-circle"></i> Create Room
+        </button>
+      </div>
+    </div>
+
+    <!-- Join Room Screen -->
+    <div id="join-room-screen" class="screen">
+      <div class="screen-header">
+        <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        <h2>Join Room</h2>
+      </div>
+      <div class="screen-content">
+        <div class="form-group">
+          <label for="room-id">Room ID</label>
+          <input type="text" id="room-id" placeholder="Enter room ID" maxlength="8">
+        </div>
+        <div class="form-group">
+          <label for="join-room-password">Room Password (if required)</label>
+          <input type="password" id="join-room-password" placeholder="Enter room password">
+        </div>
+        <button id="join-room-submit" class="primary-btn">
+          <i class="fas fa-sign-in-alt"></i> Join Room
+        </button>
+      </div>
+    </div>
+
+    <!-- Room Screen -->
+    <div id="room-screen" class="screen">
+      <div class="room-header">
+        <div class="room-info">
+          <h2>Room: <span id="room-id-display"></span></h2>
+          <button id="copy-room-id" class="icon-btn" title="Copy Room ID">
+            <i class="fas fa-copy"></i>
+          </button>
+          <button id="show-qr-code" class="icon-btn" title="Show QR Code">
+            <i class="fas fa-qrcode"></i>
+          </button>
+        </div>
+        <div class="room-controls">
+          <button id="toggle-mute" class="control-btn active" title="Mute/Unmute">
+            <i class="fas fa-microphone"></i>
+            <i class="fas fa-microphone-slash hidden"></i>
+          </button>
+          <button id="toggle-screen-share" class="control-btn" title="Share Screen">
+            <i class="fas fa-desktop"></i>
+          </button>
+          <button id="leave-room" class="control-btn danger" title="Leave Room">
+            <i class="fas fa-phone-slash"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="room-content">
+        <div class="participants-container">
+          <h3>Participants</h3>
+          <ul id="participants-list"></ul>
+        </div>
+        
+        <div class="screen-share-container">
+          <div id="no-screen-message">
+            <i class="fas fa-desktop"></i>
+            <p>No screen is being shared</p>
+          </div>
+          <video id="screen-share-video" autoplay playsinline></video>
+        </div>
+      </div>
+      
+      <!-- Keyboard Shortcuts -->
+      <div class="keyboard-shortcuts">
+        <h4>Keyboard Shortcuts</h4>
+        <ul>
+          <li><span class="key">M</span> Mute/Unmute</li>
+          <li><span class="key">S</span> Share Screen</li>
+          <li><span class="key">Esc</span> Leave Room</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Room QR Code</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="qr-code"></div>
+          <p>Scan this QR code to join the room</p>
+          <p class="room-id-text">Room ID: <span id="modal-room-id"></span></p>
+          <p class="password-note">Password will be required if set</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+      <div class="notification-content">
+        <i id="notification-icon" class="fas"></i>
+        <span id="notification-message"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./libs/simple-peer.min.js"></script>
+  <script src="./libs/socket.io.min.js"></script>
+  <script src="./libs/qrcode.min.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html> 

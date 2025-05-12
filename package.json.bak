@@ -1,0 +1,34 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.bizxm.app
+productName: BizXM
+mac:
+  category: public.app-category.productivity
+  target:
+    - dmg
+    - zip
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  darkModeSupport: true
+  icon: public/assets/icon.icns
+win:
+  target:
+    - nsis
+    - portable
+  icon: public/assets/icon.png
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Network;Audio;Video
+  icon: public/assets/icon.png
+files:
+  - filter:
+      - src/**/*
+      - public/**/*
+      - package.json
+publish: null
+electronVersion: 36.2.0

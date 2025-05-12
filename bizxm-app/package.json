@@ -1,0 +1,26 @@
+{
+  "name": "bizxm-app",
+  "version": "1.0.0",
+  "main": "src/main/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "start:signaling": "node src/signaling/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "electron": "^36.2.0",
+    "electron-builder": "^26.0.12",
+    "express": "^5.1.0",
+    "qrcode": "^1.5.4",
+    "rnnoise-wasm": "^0.0.1-security",
+    "simple-peer": "^9.11.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "ws": "^8.18.2"
+  }
+}
